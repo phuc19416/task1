@@ -1,0 +1,16 @@
+INSERT INTO gold_prices (name, brand, buy_price, sell_price, currency, weight_unit, updated_at) VALUES
+('Vang mieng SJC', 'SJC', 80000000, 82000000, 'VND', 'luong', '2026-07-02T00:00:00'),
+('Vang nhan SJC 9999', 'SJC', 79500000, 81500000, 'VND', 'luong', '2026-07-02T01:00:00'),
+('Vang mieng DOJI', 'DOJI', 79800000, 81800000, 'VND', 'luong', '2026-07-02T02:00:00'),
+('Vang nhan DOJI Hung Thinh Vuong', 'DOJI', 79200000, 81200000, 'VND', 'luong', '2026-07-02T03:00:00'),
+('Vang mieng PNJ', 'PNJ', 79700000, 81700000, 'VND', 'luong', '2026-07-02T04:00:00'),
+('Vang nhan PNJ 9999', 'PNJ', 79100000, 81100000, 'VND', 'luong', '2026-07-02T05:00:00'),
+('Vang Rong Thang Long', 'BTMC', 78900000, 80900000, 'VND', 'luong', '2026-07-02T06:00:00'),
+('Vang nhan tron BTMC', 'BTMC', 78600000, 80600000, 'VND', 'luong', '2026-07-02T07:00:00'),
+('Vang mieng Mi Hong', 'MIHONG', 79000000, 81000000, 'VND', 'luong', '2026-07-02T08:00:00'),
+('Vang nhan Mi Hong 9999', 'MIHONG', 78700000, 80700000, 'VND', 'luong', '2026-07-02T09:00:00'),
+('Vang mieng Bao Tin Minh Chau', 'BTMC', 79300000, 81300000, 'VND', 'luong', '2026-07-02T10:00:00'),
+('Vang nhan Phu Quy 9999', 'PHUQUY', 78800000, 80800000, 'VND', 'luong', '2026-07-02T11:00:00'),
+('Vang mieng Phu Quy', 'PHUQUY', 79400000, 81400000, 'VND', 'luong', '2026-07-02T12:00:00'),
+('Vang nhan Bao Tin Manh Hai', 'BTMH', 78500000, 80500000, 'VND', 'luong', '2026-07-02T13:00:00'),
+('Vang mieng Bao Tin Manh Hai', 'BTMH', 79200000, 81200000, 'VND', 'luong', '2026-07-02T14:00:00');

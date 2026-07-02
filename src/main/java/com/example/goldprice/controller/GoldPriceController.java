@@ -5,12 +5,15 @@ import com.example.goldprice.dto.HealthResponse;
 import com.example.goldprice.service.GoldPriceService;
 import jakarta.validation.constraints.Pattern;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -31,16 +34,23 @@ public class GoldPriceController {
     }
 
     @GetMapping("/api/gold-prices")
-    public List<GoldPriceResponse> getGoldPrices() {
-        return goldPriceService.getGoldPrices();
+    public List<GoldPriceResponse> getGoldPrices(
+            @RequestParam(defaultValue = "2026-07-02")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate date
+    ) {
+        return goldPriceService.getGoldPrices(date);
     }
 
-    @GetMapping("/api/gold-prices/{code}")
-    public GoldPriceResponse getGoldPriceByCode(
+    @GetMapping("/api/gold-prices/{brand}")
+    public List<GoldPriceResponse> getGoldPriceByBrand(
             @PathVariable
-            @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "Ma vang khong hop le")
-            String code
+            @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "Thuong hieu vang khong hop le")
+            String brand,
+            @RequestParam(defaultValue = "2026-07-02")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate date
     ) {
-        return goldPriceService.getGoldPriceByCode(code);
+        return goldPriceService.getGoldPricesByBrand(brand, date);
     }
 }

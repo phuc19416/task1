@@ -20,26 +20,31 @@ class GoldPriceControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void getGoldPricesReturnsList() throws Exception {
-        mockMvc.perform(get("/api/gold-prices"))
+    void getGoldPricesByDateReturnsSeededList() throws Exception {
+        mockMvc.perform(get("/api/gold-prices").param("date", "2026-07-02"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].code").value("SJC"))
+                .andExpect(jsonPath("$", hasSize(15)))
+                .andExpect(jsonPath("$[0].name").value("Vang mieng SJC"))
+                .andExpect(jsonPath("$[0].brand").value("SJC"))
+                .andExpect(jsonPath("$[0].buyPrice").value(80000000))
+                .andExpect(jsonPath("$[0].sellPrice").value(82000000))
                 .andExpect(jsonPath("$[0].currency").value("VND"))
-                .andExpect(jsonPath("$[0].spread").value(2200000));
+                .andExpect(jsonPath("$[0].weightUnit").value("luong"))
+                .andExpect(jsonPath("$[0].updatedAt").value("2026-07-02T00:00:00"));
     }
 
     @Test
-    void getGoldPriceByCodeReturnsDetail() throws Exception {
-        mockMvc.perform(get("/api/gold-prices/doji"))
+    void getGoldPricesByBrandAndDateReturnsBrandHistory() throws Exception {
+        mockMvc.perform(get("/api/gold-prices/sjc").param("date", "2026-07-02"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("DOJI"))
-                .andExpect(jsonPath("$.sell").value(76950000));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].brand").value("SJC"))
+                .andExpect(jsonPath("$[1].updatedAt").value("2026-07-02T01:00:00"));
     }
 
     @Test
-    void getGoldPriceByUnknownCodeReturnsNotFound() throws Exception {
-        mockMvc.perform(get("/api/gold-prices/UNKNOWN"))
+    void getGoldPricesByMissingDateReturnsNotFound() throws Exception {
+        mockMvc.perform(get("/api/gold-prices").param("date", "2026-07-03"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("NOT_FOUND"));
     }

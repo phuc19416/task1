@@ -1,17 +1,15 @@
 package com.example.goldprice.dto;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public record GoldPriceResponse(
-        String code,
         String name,
-        String unit,
-        BigDecimal buy,
-        BigDecimal sell,
-        BigDecimal spread,
+        String brand,
+        BigDecimal buyPrice,
+        BigDecimal sellPrice,
         String currency,
-        String source,
-        Instant updatedAt
+        String weightUnit,
+        LocalDateTime updatedAt
 ) {
 }

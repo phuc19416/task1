@@ -2,13 +2,15 @@
 
 Day la API mau tra so lieu gia vang cho website hien thi. Project duoc viet theo huong Java backend voi Spring Boot.
 
-Trong task nay, nguon du lieu gia vang duoc gia dinh la da co san, nen code dang mock data trong `GoldPriceService`. Khi co nguon that, chi can thay phan service bang logic goi API ben thu ba, doc database hoac doc cache.
+Trong task nay, du lieu gia vang duoc seed san vao H2 in-memory database bang `src/main/resources/data.sql`. Khi co nguon that, co the thay phan seed/demo bang logic goi API ben thu ba, doc database that hoac doc cache.
 
 ## Cong nghe
 
 - Java 21
 - Spring Boot 3
 - Maven
+- Spring Data JPA
+- H2 Database
 - JUnit 5
 - MockMvc
 
@@ -21,7 +23,11 @@ src/main/java/com/example/goldprice
   dto/*.java
   exception/*.java
   model/GoldPrice.java
+  repository/GoldPriceRepository.java
   service/GoldPriceService.java
+src/main/resources
+  application.properties
+  data.sql
 
 src/test/java/com/example/goldprice
   controller/GoldPriceControllerTest.java
@@ -53,34 +59,34 @@ GET /health
 ### Lay danh sach gia vang
 
 ```http
-GET /api/gold-prices
+GET /api/gold-prices?date=2026-07-02
 ```
 
 Response mau:
 
 ```json
-[
-  {
-    "code": "SJC",
-    "name": "Vang SJC",
-    "unit": "VND/luong",
-    "buy": 74800000,
-    "sell": 77000000,
-    "spread": 2200000,
-    "currency": "VND",
-    "source": "mock-gold-price-source",
-    "updatedAt": "2026-07-02T05:00:00Z"
-  }
-]
+{
+  "name": "Vang mieng SJC",
+  "brand": "SJC",
+  "buyPrice": 80000000,
+  "sellPrice": 82000000,
+  "currency": "VND",
+  "weightUnit": "luong",
+  "updatedAt": "2026-07-02T00:00:00"
+}
 ```
 
-### Lay gia vang theo ma
+### Lay gia vang theo thuong hieu
 
 ```http
-GET /api/gold-prices/SJC
+GET /api/gold-prices/SJC?date=2026-07-02
 ```
 
-Neu khong tim thay ma vang, API tra ve HTTP `404`.
+Neu khong tim thay du lieu theo ngay hoac thuong hieu, API tra ve HTTP `404`.
+
+## Du lieu demo
+
+Database demo co 15 ban ghi trong ngay `2026-07-02`, tu `00:00:00` den `14:00:00`. Phut va giay duoc mac dinh la `00` de website map theo truc gio de hon.
 
 ## Test
 

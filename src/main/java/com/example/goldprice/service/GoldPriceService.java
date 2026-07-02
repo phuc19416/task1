@@ -2,52 +2,62 @@ package com.example.goldprice.service;
 
 import com.example.goldprice.dto.GoldPriceResponse;
 import com.example.goldprice.exception.GoldPriceNotFoundException;
-import com.example.goldprice.model.GoldPrice;
-import java.math.BigDecimal;
-import java.time.Instant;
+import com.example.goldprice.mapper.GoldPriceMapper;
+import com.example.goldprice.repository.GoldPriceRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GoldPriceService {
 
-    private static final String SOURCE_NAME = "mock-gold-price-source";
+    private final GoldPriceRepository goldPriceRepository;
+    private final GoldPriceMapper goldPriceMapper;
 
-    private final List<GoldPrice> mockPrices = List.of(
-            new GoldPrice("SJC", "Vang SJC", "VND/luong", new BigDecimal("74800000"), new BigDecimal("77000000")),
-            new GoldPrice("DOJI", "Vang DOJI", "VND/luong", new BigDecimal("74750000"), new BigDecimal("76950000")),
-            new GoldPrice("PNJ", "Vang PNJ", "VND/luong", new BigDecimal("74600000"), new BigDecimal("76850000"))
-    );
+    public GoldPriceService(GoldPriceRepository goldPriceRepository, GoldPriceMapper goldPriceMapper) {
+        this.goldPriceRepository = goldPriceRepository;
+        this.goldPriceMapper = goldPriceMapper;
+    }
 
-    public List<GoldPriceResponse> getGoldPrices() {
-        return mockPrices.stream()
-                .map(this::toResponse)
+    public List<GoldPriceResponse> getGoldPrices(LocalDate date) {
+        var prices = goldPriceRepository.findByUpdatedAtBetweenOrderByUpdatedAtAscBrandAsc(
+                startOfDay(date),
+                startOfNextDay(date)
+        );
+
+        if (prices.isEmpty()) {
+            throw new GoldPriceNotFoundException("Khong tim thay du lieu gia vang ngay: " + date);
+        }
+
+        return prices.stream()
+                .map(goldPriceMapper::toResponse)
                 .toList();
     }
 
-    public GoldPriceResponse getGoldPriceByCode(String code) {
-        String normalizedCode = code.toUpperCase();
+    public List<GoldPriceResponse> getGoldPricesByBrand(String brand, LocalDate date) {
+        var prices = goldPriceRepository.findByBrandIgnoreCaseAndUpdatedAtBetweenOrderByUpdatedAtAsc(
+                brand,
+                startOfDay(date),
+                startOfNextDay(date)
+        );
 
-        return mockPrices.stream()
-                .filter(price -> price.code().equals(normalizedCode))
-                .findFirst()
-                .map(this::toResponse)
-                .orElseThrow(() -> new GoldPriceNotFoundException(code));
+        if (prices.isEmpty()) {
+            throw new GoldPriceNotFoundException(
+                    "Khong tim thay du lieu gia vang cho thuong hieu " + brand + " ngay: " + date
+            );
+        }
+
+        return prices.stream()
+                .map(goldPriceMapper::toResponse)
+                .toList();
     }
 
-    private GoldPriceResponse toResponse(GoldPrice price) {
-        BigDecimal spread = price.sell().subtract(price.buy());
+    private LocalDateTime startOfDay(LocalDate date) {
+        return date.atStartOfDay();
+    }
 
-        return new GoldPriceResponse(
-                price.code(),
-                price.name(),
-                price.unit(),
-                price.buy(),
-                price.sell(),
-                spread,
-                "VND",
-                SOURCE_NAME,
-                Instant.now()
-        );
+    private LocalDateTime startOfNextDay(LocalDate date) {
+        return date.plusDays(1).atStartOfDay();
     }
 }
