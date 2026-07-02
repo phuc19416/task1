@@ -1,3 +1,4 @@
+# document: https://docs.google.com/document/d/1dXIbWKEuxLxPf8PKsyHrrJcPruH9KWlxe5Mc0oMNhqc/edit?usp=sharing
 # Gold Price API - Java Backend
 
 Day la API mau tra so lieu gia vang cho website hien thi. Project duoc viet theo huong Java backend voi Spring Boot.
